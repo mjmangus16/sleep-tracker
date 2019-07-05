@@ -40,6 +40,7 @@ const SleepInputForm = ({
   id,
   activeData,
   postSleepObject,
+  updateSleepObject,
   close,
   status
 }) => {
@@ -223,7 +224,7 @@ const SleepInputForm = ({
             <Button
               size="small"
               className={classes.emoji}
-              onClick={e => this.emojiToggle(e, "Morning")}
+              onClick={e => emojiToggle(e, "Morning")}
               variant={morningNum === 1 ? "contained" : "text"}
             >
               😴

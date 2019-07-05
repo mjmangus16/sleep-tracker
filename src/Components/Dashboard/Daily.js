@@ -25,7 +25,7 @@ class Daily extends Component {
       );
 
       sum = sum.split(":");
-      console.log(sum);
+
       if (sum[1] < 15) {
         sum = parseInt(sum[0]);
       } else if (sum[1] >= 15 && sum[1] <= 45) {
@@ -33,7 +33,7 @@ class Daily extends Component {
       } else if (sum[1] > 45) {
         sum = parseInt(sum[0]) + 1;
       }
-      console.log(sum);
+
       difference = 24 - sum;
       content = (
         <DailyChart

@@ -24,17 +24,16 @@ const styles = theme => ({
   }
 });
 
-class YearlyTable extends Component {
-  delete = item => {
+const YearlyTable = ({ classes, data, id, editSleep, deleteSleepObject }) => {
+  const deleteItem = item => {
     const dateArray = item.date.split("/");
-    const id = this.props.id;
     const month = dateArray[0];
     const day = dateArray[1];
     const year = dateArray[2];
-    this.props.deleteSleepObject(id, month, day, year);
+    deleteSleepObject(id, month, day, year);
   };
 
-  getEmoji = num => {
+  const getEmoji = num => {
     if (num === 1) {
       return "😴";
     } else if (num === 2) {
@@ -45,69 +44,67 @@ class YearlyTable extends Component {
       return "😀";
     }
   };
-  render() {
-    const { classes } = this.props;
-    return (
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Date</TableCell>
-            <TableCell align="center">Start</TableCell>
-            <TableCell align="center">End</TableCell>
-            <TableCell align="center">Morning Emoji</TableCell>
-            <TableCell align="center">Daytime Emoji</TableCell>
-            <TableCell align="center">Total Hours Asleep</TableCell>
-            <TableCell align="center" />
+
+  return (
+    <Table className={classes.table}>
+      <TableHead>
+        <TableRow>
+          <TableCell align="center">Date</TableCell>
+          <TableCell align="center">Start</TableCell>
+          <TableCell align="center">End</TableCell>
+          <TableCell align="center">Morning Emoji</TableCell>
+          <TableCell align="center">Daytime Emoji</TableCell>
+          <TableCell align="center">Total Hours Asleep</TableCell>
+          <TableCell align="center" />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {data.map(item => (
+          <TableRow key={item.date}>
+            <TableCell align="center" component="th" scope="row">
+              {item.date}
+            </TableCell>
+            <TableCell align="center">{item.start_sleep_time}</TableCell>
+            <TableCell align="center">{item.end_sleep_time}</TableCell>
+            <TableCell align="center" style={{ fontSize: "2rem" }}>
+              {getEmoji(item.sleep_emotion)}
+            </TableCell>
+            <TableCell align="center" style={{ fontSize: "2rem" }}>
+              {getEmoji(item.day_emotion)}
+            </TableCell>
+            <TableCell align="center">
+              {sleepCalc(item.start_sleep_time, item.end_sleep_time)}
+            </TableCell>
+            <TableCell align="center">
+              <Button
+                variant="outlined"
+                style={{ margin: 5 }}
+                onClick={() =>
+                  editSleep({
+                    date: item.date,
+                    startTime: item.start_sleep_time,
+                    endTime: item.end_sleep_time,
+                    morning: item.sleep_emotion,
+                    day: item.day_emotion
+                  })
+                }
+              >
+                <i className="far fa-edit" />
+              </Button>
+              <Button
+                variant="outlined"
+                style={{ margin: 5 }}
+                onClick={() => deleteItem(item)}
+              >
+                <i className="far fa-trash-alt" />
+              </Button>
+            </TableCell>
           </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.data.map(item => (
-            <TableRow key={item.date}>
-              <TableCell align="center" component="th" scope="row">
-                {item.date}
-              </TableCell>
-              <TableCell align="center">{item.start_sleep_time}</TableCell>
-              <TableCell align="center">{item.end_sleep_time}</TableCell>
-              <TableCell align="center" style={{ fontSize: "2rem" }}>
-                {this.getEmoji(item.sleep_emotion)}
-              </TableCell>
-              <TableCell align="center" style={{ fontSize: "2rem" }}>
-                {this.getEmoji(item.day_emotion)}
-              </TableCell>
-              <TableCell align="center">
-                {sleepCalc(item.start_sleep_time, item.end_sleep_time)}
-              </TableCell>
-              <TableCell align="center">
-                <Button
-                  variant="outlined"
-                  style={{ margin: 5 }}
-                  onClick={() =>
-                    this.props.editSleep({
-                      date: item.date,
-                      startTime: item.start_sleep_time,
-                      endTime: item.end_sleep_time,
-                      morning: item.sleep_emotion,
-                      day: item.day_emotion
-                    })
-                  }
-                >
-                  <i className="far fa-edit" />
-                </Button>
-                <Button
-                  variant="outlined"
-                  style={{ margin: 5 }}
-                  onClick={() => this.delete(item)}
-                >
-                  <i className="far fa-trash-alt" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  }
-}
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
 
 const mapStateToProps = state => {
   return {

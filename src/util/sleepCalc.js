@@ -56,5 +56,3 @@ const calcMode = numArray => {
 
   return modes;
 };
-
-console.log(calcMode([1,1,2,2]))

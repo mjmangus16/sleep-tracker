@@ -3,17 +3,6 @@ import { Line } from "react-chartjs-2";
 import withWidth from "@material-ui/core/withWidth";
 import { blue } from "@material-ui/core/colors";
 
-const daysInMonth = (month, year) => {
-  const num = new Date(year, month, 0).getDate();
-
-  let array = [];
-
-  for (let i = 1; i < num + 1; i++) {
-    array.push(i);
-  }
-  return array;
-};
-
 class MonthlyChart extends Component {
   state = {
     chartData: {
@@ -32,8 +21,6 @@ class MonthlyChart extends Component {
   };
 
   render() {
-    const { data } = this.props;
-    console.log(data);
     return (
       <Line
         data={this.state.chartData}

@@ -18,7 +18,7 @@ class DailyChart extends Component {
   };
 
   render() {
-    const { width, data } = this.props;
+    const { data } = this.props;
 
     return (
       <Pie
@@ -30,7 +30,7 @@ class DailyChart extends Component {
           title: {
             display: true,
             text: `Awake Time vs Sleep Time For ${data.date}`,
-            fontSize: width === "xs" ? 12 : 18,
+            fontSize: this.props.width === "xs" ? 12 : 18,
             fontColor: "#E6E6E6"
           }
         }}

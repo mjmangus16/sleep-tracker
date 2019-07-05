@@ -20,8 +20,6 @@ class WeeklyChart extends Component {
     }
   };
   render() {
-    const { data } = this.props;
-    console.log(data);
     return (
       <Line
         data={this.state.chartData}

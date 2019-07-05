@@ -5,7 +5,6 @@ import { BrowserRouter as Router, withRouter } from "react-router-dom";
 import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import logger from "redux-logger";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./util/setAuthToken";
 import { setCurrentUser, logoutUser } from "./store/actions/authActions";
@@ -15,13 +14,13 @@ import App from "./App";
 import rootReducer from "./store/reducers";
 
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-import { indigo, blue, deepPurple } from "@material-ui/core/colors";
+import { indigo } from "@material-ui/core/colors";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(thunk, logger))
+  composeEnhancers(applyMiddleware(thunk))
 );
 
 const AppWithRouter = withRouter(App);
