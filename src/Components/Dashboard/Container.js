@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { Toolbar, Fab, Paper, Tabs, Tab, Button } from "@material-ui/core";
+import { Toolbar, Fab, Paper, Tabs, Tab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
 import Recommendations from "./Recommendations";
@@ -24,107 +24,88 @@ const styles = theme => ({
   }
 });
 
-class DashboardContainer extends Component {
-  state = {
-    tabValue: 0,
-    sleepInputStatus: false,
-    activeData: null,
-    recStatus: false
+const DashboardContainer = ({ classes }) => {
+  const [tabValue, setTabValue] = useState(0);
+  const [sleepInputStatus, setSleepInputStatus] = useState(false);
+  const [activeData, setActiveData] = useState(null);
+  const [recStatus, setRecStatus] = useState(false);
+
+  const changeTab = (event, newValue) => {
+    setTabValue(newValue);
   };
 
-  changeTab = (event, newValue) => {
-    this.setState({ tabValue: newValue });
+  const toggleRecStatus = () => {
+    setRecStatus(!recStatus);
   };
 
-  toggleRecStatus = () => {
-    this.setState({ recStatus: !this.state.recStatus });
+  const sleepInputOpen = () => {
+    setSleepInputStatus(true);
   };
 
-  sleepInputOpen = () => {
-    this.setState({ sleepInputStatus: true });
+  const sleepInputClose = () => {
+    setSleepInputStatus(false);
+    setActiveData(null);
   };
 
-  sleepInputClose = () => {
-    this.setState({ sleepInputStatus: false, activeData: null });
+  const editSleep = data => {
+    setActiveData(data);
+    setSleepInputStatus(!sleepInputStatus);
   };
 
-  editSleep = data => {
-    this.setState(() => {
-      return {
-        activeData: data,
-        sleepInputStatus: !this.state.sleepInputStatus
-      };
-    });
-  };
+  let content;
 
-  render() {
-    const { classes } = this.props;
-    const { tabValue } = this.state;
-
-    let content;
-
-    if (this.state.tabValue === 0) {
-      content = <Daily />;
-    } else if (this.state.tabValue === 1) {
-      content = <Weekly />;
-    } else if (this.state.tabValue === 2) {
-      content = <Monthly />;
-    } else if (this.state.tabValue === 3) {
-      content = <Yearly editSleep={this.editSleep} />;
-    }
-
-    return (
-      <div>
-        <Paper className={classes.tabsRoot}>
-          <Tabs
-            value={tabValue}
-            onChange={this.changeTab}
-            // indicatorColor="secondary"
-            // textColor="secondary"
-            centered
-          >
-            <Tab label="Daily" />
-            <Tab label="Weekly" />
-            <Tab label="Monthly" />
-            <Tab label="Yearly" />
-          </Tabs>
-        </Paper>
-        <Toolbar className={classes.root}>
-          <Fab
-            color="primary"
-            aria-label="Add"
-            size="small"
-            className={classes.fab}
-            onClick={this.sleepInputOpen}
-          >
-            <AddIcon />
-          </Fab>
-          <Fab
-            color="primary"
-            aria-label="Add"
-            size="small"
-            variant="extended"
-            style={{ paddingLeft: 15, paddingRight: 15 }}
-            onClick={this.toggleRecStatus}
-          >
-            Recommendations
-          </Fab>
-        </Toolbar>
-        <Paper style={{ width: "90%", margin: "auto", padding: 25 }}>
-          {content}
-        </Paper>
-        <SleepInputForm
-          status={this.state.sleepInputStatus}
-          close={this.sleepInputClose}
-          activeData={this.state.activeData}
-        />
-        <Recommendations
-          status={this.state.recStatus}
-          toggle={this.toggleRecStatus}
-        />
-      </div>
-    );
+  if (tabValue === 0) {
+    content = <Daily />;
+  } else if (tabValue === 1) {
+    content = <Weekly />;
+  } else if (tabValue === 2) {
+    content = <Monthly />;
+  } else if (tabValue === 3) {
+    content = <Yearly editSleep={editSleep} />;
   }
-}
+
+  return (
+    <div>
+      <Paper className={classes.tabsRoot}>
+        <Tabs value={tabValue} onChange={changeTab} centered>
+          <Tab label="Daily" />
+          <Tab label="Weekly" />
+          <Tab label="Monthly" />
+          <Tab label="Yearly" />
+        </Tabs>
+      </Paper>
+      <Toolbar className={classes.root}>
+        <Fab
+          color="primary"
+          aria-label="Add"
+          size="small"
+          className={classes.fab}
+          onClick={sleepInputOpen}
+        >
+          <AddIcon />
+        </Fab>
+        <Fab
+          color="primary"
+          aria-label="Add"
+          size="small"
+          variant="extended"
+          style={{ paddingLeft: 15, paddingRight: 15 }}
+          onClick={toggleRecStatus}
+        >
+          Recommendations
+        </Fab>
+      </Toolbar>
+      <Paper style={{ width: "90%", margin: "auto", padding: 25 }}>
+        {content}
+      </Paper>
+      <SleepInputForm
+        status={sleepInputStatus}
+        close={sleepInputClose}
+        activeData={activeData}
+      />
+      <Recommendations status={recStatus} toggle={toggleRecStatus} />
+    </div>
+  );
+};
 
 export default withStyles(styles)(DashboardContainer);

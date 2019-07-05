@@ -1,18 +1,8 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Button
-} from "@material-ui/core";
+import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 
 import Recommendation from "../../util/Recommendation";
-
-const styles = theme => ({});
 
 const Recommendations = props => {
   return (
@@ -25,4 +15,4 @@ const Recommendations = props => {
   );
 };
 
-export default withStyles(styles)(Recommendations);
+export default Recommendations;
