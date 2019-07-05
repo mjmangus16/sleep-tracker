@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -25,8 +25,6 @@ const styles = theme => ({
     margin: "auto"
   },
   textField: {
-    // marginLeft: theme.spacing(1),
-    // marginRight: theme.spacing(1),
     width: 300,
     margin: "auto"
   },
@@ -38,79 +36,78 @@ const styles = theme => ({
   }
 });
 
-class LoginForm extends Component {
-  state = {
-    username: "",
-    password: ""
+const LoginForm = ({ classes, login, history }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleUsername = event => {
+    setUsername(event.target.value);
   };
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  const handlePassword = event => {
+    setPassword(event.target.value);
   };
 
-  loginSubmit = e => {
+  const loginSubmit = e => {
     e.preventDefault();
-    this.props.login(this.state, this.props.history);
+    let user = {
+      username,
+      password
+    };
+    login(user, history);
   };
 
-  render() {
-    const { username, password } = this.state;
-    const { classes } = this.props;
-    return (
-      <Card className={classes.cardContainer} raised>
-        <form
-          className={classes.container}
-          noValidate
-          autoComplete="off"
-          onSubmit={this.loginSubmit}
+  return (
+    <Card className={classes.cardContainer} raised>
+      <form
+        className={classes.container}
+        noValidate
+        autoComplete="off"
+        onSubmit={loginSubmit}
+      >
+        <Typography variant="h6" color="inherit" className={classes.root}>
+          Login
+        </Typography>
+        <TextField
+          id="standard-name"
+          label="Username"
+          name="username"
+          className={classes.textField}
+          value={username}
+          onChange={handleUsername}
+          margin="normal"
+        />
+        <TextField
+          id="standard-name"
+          label="Password"
+          type="password"
+          name="password"
+          className={classes.textField}
+          value={password}
+          onChange={handlePassword}
+          margin="normal"
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          type="submit"
         >
-          <Typography variant="h6" color="inherit" className={classes.root}>
-            Login
-          </Typography>
-          <TextField
-            id="standard-name"
-            label="Username"
-            name="username"
-            className={classes.textField}
-            value={username}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <TextField
-            id="standard-name"
-            label="Password"
-            type="password"
-            name="password"
-            className={classes.textField}
-            value={password}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            type="submit"
-          >
-            LOGIN
-          </Button>
-          <Typography
-            variant="body1"
-            style={{ padding: 10, textAlign: "center" }}
-          >
-            Don't have a username? <br />{" "}
-            {/* <a href="#" style={{ color: "white" }}> */}
-            <Link to="/create" style={{ color: "white" }}>
-              Create an account here.
-            </Link>{" "}
-            {/* needs to be restyled */}
-            {/* </a> */}
-          </Typography>
-        </form>
-      </Card>
-    );
-  }
-}
+          LOGIN
+        </Button>
+        <Typography
+          variant="body1"
+          style={{ padding: 10, textAlign: "center" }}
+        >
+          Don't have a username? <br />{" "}
+          <Link to="/create" style={{ color: "white" }}>
+            Create an account here.
+          </Link>{" "}
+        </Typography>
+      </form>
+    </Card>
+  );
+};
 
 const mapStateToProps = state => {
   return {
