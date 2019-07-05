@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import {
   postSleepObject,
@@ -35,286 +35,274 @@ const styles = theme => ({
   }
 });
 
-class SleepInputForm extends Component {
-  state = {
-    date: "",
-    startTime: "",
-    endTime: "",
-    morning: 5,
-    day: 5
+const SleepInputForm = ({
+  classes,
+  id,
+  activeData,
+  postSleepObject,
+  close,
+  status
+}) => {
+  const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [morning, setMorning] = useState(5);
+  const [day, setDay] = useState(5);
+
+  const resetState = () => {
+    setDate("");
+    setStartTime("");
+    setEndTime("");
+    setMorning(5);
+    setDay(5);
   };
 
-  submitForm = () => {
-    const dateArray = this.state.date.split("-");
+  const setData = () => {
+    const dateArray = date.split("-");
     const formattedDate = `${dateArray[1]}/${dateArray[2]}/${dateArray[0]}`;
     const object = {
-      user_id: this.props.id,
+      user_id: id,
       date: formattedDate,
-      start_sleep_time: this.state.startTime,
-      end_sleep_time: this.state.endTime,
-      day_emotion: this.state.day,
-      sleep_emotion: this.state.morning,
+      start_sleep_time: startTime,
+      end_sleep_time: endTime,
+      day_emotion: day,
+      sleep_emotion: morning,
       month: parseInt(dateArray[1]),
       year: parseInt(dateArray[0]),
       day: parseInt(dateArray[2])
     };
-    this.props.postSleepObject(object);
-    this.setState({ date: "", startTime: "", endTime: "", morning: 5, day: 5 });
-    this.props.close();
+    return object;
   };
 
-  updateForm = () => {
-    const { activeData } = this.props;
-    const dateArray = this.state.date.split("-");
-    const formattedDate = `${dateArray[1]}/${dateArray[2]}/${dateArray[0]}`;
-    const object = {
-      user_id: this.props.id,
-      date: formattedDate,
-      start_sleep_time: this.state.startTime,
-      end_sleep_time: this.state.endTime,
-      day_emotion: this.state.day,
-      sleep_emotion: this.state.morning,
-      month: parseInt(dateArray[1]),
-      year: parseInt(dateArray[0]),
-      day: parseInt(dateArray[2])
-    };
+  const submitForm = () => {
+    const object = setData();
+    postSleepObject(object);
+    resetState();
+    close();
+  };
 
-    if (this.state.date === "") {
+  const updateForm = () => {
+    const object = setData();
+
+    if (date === "") {
       const dateArray2 = activeData.date.split("/");
       object.date = activeData.date;
       object.month = parseInt(dateArray2[0]);
       object.year = parseInt(dateArray2[2]);
       object.day = parseInt(dateArray2[1]);
     }
-    if (this.state.startTime === "")
-      object.start_sleep_time = activeData.startTime;
-    if (this.state.endTime === "") object.end_sleep_time = activeData.endTime;
-    if (this.state.day === 5) object.day_emotion = activeData.day;
-    if (this.state.morning === 5) object.sleep_emotion = activeData.morning;
+    if (startTime === "") object.start_sleep_time = activeData.startTime;
+    if (endTime === "") object.end_sleep_time = activeData.endTime;
+    if (day === 5) object.day_emotion = activeData.day;
+    if (morning === 5) object.sleep_emotion = activeData.morning;
 
-    console.log(object);
-    this.props.updateSleepObject(object);
-    this.setState({ date: "", startTime: "", endTime: "", morning: 5, day: 5 });
-    this.props.close();
+    updateSleepObject(object);
+    resetState();
+    close();
   };
 
-  closeModal = () => {
-    this.props.close();
-    this.setState({ date: "", startTime: "", endTime: "", morning: 5, day: 5 });
+  const closeModal = () => {
+    close();
+    resetState();
   };
 
-  getDate = e => {
-    this.setState({ date: e.target.value });
+  const getDate = e => {
+    setDate(e.target.value);
   };
 
-  // getStartTime = date => {
-  //   console.log("date");
-  //   // this.setState({ startTime: e.target.value });
-  // };
-
-  // getEndTime = e => {
-  //   this.setState({ endTime: e.target.value });
-  // };
-
-  handleClockSuccess = date => {
-    this.setState({
-      startTime: date
-    });
+  const handleClockSuccess = date => {
+    setStartTime(date);
   };
 
-  handleClockSuccess_end = date => {
-    this.setState({
-      endTime: date
-    });
+  const handleClockSuccess_end = date => {
+    setEndTime(date);
   };
 
-  emojiToggle = (e, data) => {
+  const emojiToggle = (e, data) => {
     let content = e.target.textContent;
 
     if (data === "Morning") {
       switch (content) {
         case "😴": {
-          return this.setState({ morning: 1 });
+          return setMorning(1);
         }
         case "😐": {
-          return this.setState({ morning: 2 });
+          return setMorning(2);
         }
         case "😌": {
-          return this.setState({ morning: 3 });
+          return setMorning(3);
         }
         case "😀": {
-          return this.setState({ morning: 4 });
+          return setMorning(4);
         }
         default: {
-          return this.setState({ morning: null });
+          return setMorning(5);
         }
       }
     } else if (data === "Daytime") {
       switch (content) {
         case "😴": {
-          return this.setState({ day: 1 });
+          return setDay(1);
         }
         case "😐": {
-          return this.setState({ day: 2 });
+          return setDay(2);
         }
         case "😌": {
-          return this.setState({ day: 3 });
+          return setDay(3);
         }
         case "😀": {
-          return this.setState({ day: 4 });
+          return setDay(4);
+        }
+        default: {
+          return setDay(5);
         }
       }
     }
   };
 
-  render() {
-    const { classes } = this.props;
+  let formattedDate;
+  let morningNum;
+  let dayNum;
 
-    let formattedDate;
-    let morningNum;
-    let dayNum;
-
-    if (this.props.activeData) {
-      let dateArray = this.props.activeData.date.split("/");
-      formattedDate = `${dateArray[2]}-${dateArray[0]}-${dateArray[1]}`;
-      morningNum = this.props.activeData.morning;
-      dayNum = this.props.activeData.day;
-    } else {
-    }
-
-    if (this.state.morning === 5 && !this.props.activeData) {
-      morningNum = this.state.morning;
-    } else if (this.state.morning === 5 && this.props.activeData) {
-      morningNum = this.props.activeData.morning;
-    } else if (this.state.morning !== 5) {
-      morningNum = this.state.morning;
-    }
-
-    if (this.state.day === 5 && !this.props.activeData) {
-      dayNum = this.state.day;
-    } else if (this.state.day === 5 && this.props.activeData) {
-      dayNum = this.props.activeData.day;
-    } else if (this.state.day !== 5) {
-      dayNum = this.state.day;
-    }
-
-    return (
-      <Dialog open={this.props.status} onClose={this.closeModal}>
-        <DialogTitle>Submit Sleep</DialogTitle>
-        <DialogContent style={{ maxWidth: 500 }}>
-          <DialogContentText>
-            Complete the form below to submit your sleep cycle.
-          </DialogContentText>
-          <form className={classes.form}>
-            <TextField
-              defaultValue={formattedDate ? formattedDate : this.state.date}
-              id="date"
-              label="Date"
-              type="date"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true
-              }}
-              onChange={this.getDate}
-            />
-            <div>
-              <Clock
-                label="Sleep Start"
-                id="startTime"
-                onSuccess={this.handleClockSuccess}
-              />
-              <Clock
-                label="Sleep End"
-                id="endTime"
-                onSuccess={this.handleClockSuccess_end}
-              />
-            </div>
-            <DialogContentText style={{ textAlign: "right" }}>
-              Morning Feeling:{" "}
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Morning")}
-                variant={morningNum === 1 ? "contained" : "text"}
-              >
-                😴
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Morning")}
-                variant={morningNum === 2 ? "contained" : "text"}
-              >
-                😐
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Morning")}
-                variant={morningNum === 3 ? "contained" : "text"}
-              >
-                😌
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Morning")}
-                variant={morningNum === 4 ? "contained" : "text"}
-              >
-                😀
-              </Button>
-            </DialogContentText>
-            <DialogContentText style={{ textAlign: "right" }}>
-              Day Feeling:{" "}
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Daytime")}
-                variant={dayNum === 1 ? "contained" : "text"}
-              >
-                😴
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Daytime")}
-                variant={dayNum === 2 ? "contained" : "text"}
-              >
-                😐
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Daytime")}
-                variant={dayNum === 3 ? "contained" : "text"}
-              >
-                😌
-              </Button>
-              <Button
-                size="small"
-                className={classes.emoji}
-                onClick={e => this.emojiToggle(e, "Daytime")}
-                variant={dayNum === 4 ? "contained" : "text"}
-              >
-                😀
-              </Button>
-            </DialogContentText>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            color="primary"
-            fullWidth
-            variant="contained"
-            onClick={this.props.activeData ? this.updateForm : this.submitForm}
-          >
-            {this.props.activeData ? "Update" : "Submit"}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  if (activeData) {
+    let dateArray = activeData.date.split("/");
+    formattedDate = `${dateArray[2]}-${dateArray[0]}-${dateArray[1]}`;
+    morningNum = activeData.morning;
+    dayNum = activeData.day;
   }
-}
+
+  if (morning === 5 && !activeData) {
+    morningNum = morning;
+  } else if (morning === 5 && activeData) {
+    morningNum = activeData.morning;
+  } else if (morning !== 5) {
+    morningNum = morning;
+  }
+
+  if (day === 5 && !activeData) {
+    dayNum = day;
+  } else if (day === 5 && activeData) {
+    dayNum = activeData.day;
+  } else if (day !== 5) {
+    dayNum = day;
+  }
+
+  return (
+    <Dialog open={status} onClose={closeModal}>
+      <DialogTitle>Submit Sleep</DialogTitle>
+      <DialogContent style={{ maxWidth: 500 }}>
+        <DialogContentText>
+          Complete the form below to submit your sleep cycle.
+        </DialogContentText>
+        <form className={classes.form}>
+          <TextField
+            defaultValue={formattedDate ? formattedDate : date}
+            id="date"
+            label="Date"
+            type="date"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
+            onChange={getDate}
+          />
+          <div>
+            <Clock
+              label="Sleep Start"
+              id="startTime"
+              onSuccess={handleClockSuccess}
+            />
+            <Clock
+              label="Sleep End"
+              id="endTime"
+              onSuccess={handleClockSuccess_end}
+            />
+          </div>
+          <DialogContentText style={{ textAlign: "right" }}>
+            Morning Feeling:{" "}
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => this.emojiToggle(e, "Morning")}
+              variant={morningNum === 1 ? "contained" : "text"}
+            >
+              😴
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Morning")}
+              variant={morningNum === 2 ? "contained" : "text"}
+            >
+              😐
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Morning")}
+              variant={morningNum === 3 ? "contained" : "text"}
+            >
+              😌
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Morning")}
+              variant={morningNum === 4 ? "contained" : "text"}
+            >
+              😀
+            </Button>
+          </DialogContentText>
+          <DialogContentText style={{ textAlign: "right" }}>
+            Day Feeling:{" "}
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Daytime")}
+              variant={dayNum === 1 ? "contained" : "text"}
+            >
+              😴
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Daytime")}
+              variant={dayNum === 2 ? "contained" : "text"}
+            >
+              😐
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Daytime")}
+              variant={dayNum === 3 ? "contained" : "text"}
+            >
+              😌
+            </Button>
+            <Button
+              size="small"
+              className={classes.emoji}
+              onClick={e => emojiToggle(e, "Daytime")}
+              variant={dayNum === 4 ? "contained" : "text"}
+            >
+              😀
+            </Button>
+          </DialogContentText>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          color="primary"
+          fullWidth
+          variant="contained"
+          onClick={activeData ? updateForm : submitForm}
+        >
+          {activeData ? "Update" : "Submit"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 const mapStateToProps = state => {
   return {
