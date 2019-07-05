@@ -10,9 +10,7 @@ const styles = theme => ({
   }
 });
 
-const Header = props => {
-  const { classes, isAuthenticated } = props;
-
+const Header = ({ classes, isAuthenticated, logoutUser }) => {
   return (
     <div className={classes.root}>
       <AppBar position="static" color="primary">
@@ -21,7 +19,7 @@ const Header = props => {
             Sleep Tracker
           </Typography>
           {isAuthenticated && (
-            <Button variant="outlined" onClick={props.logoutUser}>
+            <Button variant="outlined" onClick={logoutUser}>
               LOGOUT
             </Button>
           )}

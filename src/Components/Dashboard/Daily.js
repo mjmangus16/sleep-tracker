@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { getDailyData } from "../../store/actions/profileActions";
 
@@ -6,47 +6,36 @@ import { sleepCalc } from "../../util/sleepCalc";
 
 import DailyChart from "./Charts/DailyChart";
 
-class Daily extends Component {
-  componentDidMount() {
-    if (this.props.isAuthenticated) {
-      this.props.getDailyData(this.props.id);
+const Daily = ({ isAuthenticated, id, getDailyData, dailyData }) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      getDailyData(id);
     }
-  }
+  });
 
-  render() {
-    let sum;
-    let difference;
-    let content;
+  let sum;
+  let difference;
+  let content;
 
-    if (Object.keys(this.props.dailyData).length) {
-      sum = sleepCalc(
-        this.props.dailyData.start_sleep_time,
-        this.props.dailyData.end_sleep_time
-      );
+  if (Object.keys(dailyData).length) {
+    sum = sleepCalc(dailyData.start_sleep_time, dailyData.end_sleep_time);
 
-      sum = sum.split(":");
+    sum = sum.split(":");
 
-      if (sum[1] < 15) {
-        sum = parseInt(sum[0]);
-      } else if (sum[1] >= 15 && sum[1] <= 45) {
-        sum = parseInt(sum[0]) + 0.5;
-      } else if (sum[1] > 45) {
-        sum = parseInt(sum[0]) + 1;
-      }
-
-      difference = 24 - sum;
-      content = (
-        <DailyChart
-          data={this.props.dailyData}
-          sum={sum}
-          difference={difference}
-        />
-      );
+    if (sum[1] < 15) {
+      sum = parseInt(sum[0]);
+    } else if (sum[1] >= 15 && sum[1] <= 45) {
+      sum = parseInt(sum[0]) + 0.5;
+    } else if (sum[1] > 45) {
+      sum = parseInt(sum[0]) + 1;
     }
 
-    return <div>{content}</div>;
+    difference = 24 - sum;
+    content = <DailyChart data={dailyData} sum={sum} difference={difference} />;
   }
-}
+
+  return <div>{content}</div>;
+};
 
 const mapStateToProps = state => {
   return {
