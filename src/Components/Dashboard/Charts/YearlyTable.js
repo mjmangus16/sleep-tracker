@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { deleteSleepObject } from "../../../store/actions/profileActions";
 import { withStyles } from "@material-ui/core/styles";

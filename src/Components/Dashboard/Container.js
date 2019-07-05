@@ -49,7 +49,6 @@ const DashboardContainer = ({ classes }) => {
 
   const editSleep = data => {
     setActiveData(data);
-    console.log(activeData);
     setSleepInputStatus(!sleepInputStatus);
   };
 

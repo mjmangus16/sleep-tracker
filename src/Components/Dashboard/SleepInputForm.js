@@ -227,7 +227,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Morning")}
               variant={morningNum === 1 ? "contained" : "text"}
             >
-              😴
+              <span role="img" aria-label="emoji">
+                😴
+              </span>
             </Button>
             <Button
               size="small"
@@ -235,7 +237,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Morning")}
               variant={morningNum === 2 ? "contained" : "text"}
             >
-              😐
+              <span role="img" aria-label="emoji">
+                😐
+              </span>
             </Button>
             <Button
               size="small"
@@ -243,7 +247,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Morning")}
               variant={morningNum === 3 ? "contained" : "text"}
             >
-              😌
+              <span role="img" aria-label="emoji">
+                😌
+              </span>
             </Button>
             <Button
               size="small"
@@ -251,7 +257,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Morning")}
               variant={morningNum === 4 ? "contained" : "text"}
             >
-              😀
+              <span role="img" aria-label="emoji">
+                😀
+              </span>
             </Button>
           </DialogContentText>
           <DialogContentText style={{ textAlign: "right" }}>
@@ -262,7 +270,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Daytime")}
               variant={dayNum === 1 ? "contained" : "text"}
             >
-              😴
+              <span role="img" aria-label="emoji">
+                😴
+              </span>
             </Button>
             <Button
               size="small"
@@ -270,7 +280,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Daytime")}
               variant={dayNum === 2 ? "contained" : "text"}
             >
-              😐
+              <span role="img" aria-label="emoji">
+                😐
+              </span>
             </Button>
             <Button
               size="small"
@@ -278,7 +290,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Daytime")}
               variant={dayNum === 3 ? "contained" : "text"}
             >
-              😌
+              <span role="img" aria-label="emoji">
+                😌
+              </span>
             </Button>
             <Button
               size="small"
@@ -286,7 +300,9 @@ const SleepInputForm = ({
               onClick={e => emojiToggle(e, "Daytime")}
               variant={dayNum === 4 ? "contained" : "text"}
             >
-              😀
+              <span role="img" aria-label="emoji">
+                😀
+              </span>
             </Button>
           </DialogContentText>
         </form>

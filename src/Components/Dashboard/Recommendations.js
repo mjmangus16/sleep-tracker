@@ -1,5 +1,4 @@
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
 import { Dialog, DialogContent, DialogTitle } from "@material-ui/core";
 
 import Recommendation from "../../util/Recommendation";
