@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loader from "react-loader-spinner";
@@ -37,121 +37,119 @@ const styles = theme => ({
   }
 });
 
-class CreateUserForm extends Component {
-  state = {
-    username: "",
-    password: "",
-    // password2: "",
-    email: "",
-    first_name: "",
-    last_name: ""
+const CreateUserForm = ({ classes, registerUser, history }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [first_name, setFirst_name] = useState("");
+  const [last_name, setLast_name] = useState("");
+
+  const handleUsername = e => {
+    setUsername(e.target.value);
+  };
+  const handlePassword = e => {
+    setPassword(e.target.value);
+  };
+  const handleEmail = e => {
+    setEmail(e.target.value);
+  };
+  const handleFirst_name = e => {
+    setFirst_name(e.target.value);
+  };
+  const handleLast_name = e => {
+    setLast_name(e.target.value);
   };
 
-  handleChange = event => {
-    console.log("I AM THE TEXT INPUT BUTTON");
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  loginSubmit = e => {
+  const loginSubmit = e => {
     e.preventDefault();
-    this.props.registerUser(this.state, this.props.history);
+    let user = {
+      username,
+      password,
+      email,
+      first_name,
+      last_name
+    };
+    registerUser(user, history);
   };
 
-  render() {
-    const { username, password, email, first_name, last_name } = this.state;
-    const { classes } = this.props;
-    return (
-      <Card className={classes.cardContainer} raised>
-        <form
-          className={classes.container}
-          noValidate
-          autoComplete="off"
-          onSubmit={this.loginSubmit}
+  return (
+    <Card className={classes.cardContainer} raised>
+      <form
+        className={classes.container}
+        noValidate
+        autoComplete="off"
+        onSubmit={loginSubmit}
+      >
+        <Typography variant="h6" color="inherit" className={classes.root}>
+          Create User
+        </Typography>
+        <TextField
+          id="standard-name"
+          label="First Name"
+          name="first_name"
+          className={classes.textField}
+          value={first_name}
+          onChange={handleFirst_name}
+          margin="normal"
+        />
+        <TextField
+          id="standard-name"
+          label="Last Name"
+          name="last_name"
+          className={classes.textField}
+          value={last_name}
+          onChange={handleLast_name}
+          margin="normal"
+        />
+        <TextField
+          id="standard-name"
+          label="Username"
+          name="username"
+          className={classes.textField}
+          value={username}
+          onChange={handleUsername}
+          margin="normal"
+        />
+        <TextField
+          id="standard-name"
+          label="Email"
+          name="email"
+          className={classes.textField}
+          value={email}
+          onChange={handleEmail}
+          margin="normal"
+        />
+        <TextField
+          id="standard-name"
+          label="Password"
+          type="password"
+          name="password"
+          className={classes.textField}
+          value={password}
+          onChange={handlePassword}
+          margin="normal"
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          type="submit"
         >
-          <Typography variant="h6" color="inherit" className={classes.root}>
-            Create User
-          </Typography>
-          <TextField
-            id="standard-name"
-            label="First Name"
-            name="first_name"
-            className={classes.textField}
-            value={first_name}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <TextField
-            id="standard-name"
-            label="Last Name"
-            name="last_name"
-            className={classes.textField}
-            value={last_name}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <TextField
-            id="standard-name"
-            label="Username"
-            name="username"
-            className={classes.textField}
-            value={username}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <TextField
-            id="standard-name"
-            label="Email"
-            name="email"
-            className={classes.textField}
-            value={email}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          <TextField
-            id="standard-name"
-            label="Password"
-            type="password"
-            name="password"
-            className={classes.textField}
-            value={password}
-            onChange={this.handleChange}
-            margin="normal"
-          />
-          {/* <TextField
-            id="standard-name"
-            label="Confirm Password"
-            type="password"
-            name="password2"
-            className={classes.textField}
-            value={password2}
-            onChange={this.handleChange}
-            margin="normal"
-          /> */}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            type="submit"
-          >
-            CREATE USER
-          </Button>
-          <Typography
-            variant="body1"
-            style={{ padding: 10, textAlign: "center" }}
-          >
-            Already have a username? <br />{" "}
-            {/* <a href="#" style={{ color: "white" }}> */}
-            <Link to="/" style={{ color: "white" }}>
-              Login Here.
-            </Link>
-            {/* Links need to be restyled */}
-            {/* </a> */}
-          </Typography>
-        </form>
-      </Card>
-    );
-  }
-}
+          CREATE USER
+        </Button>
+        <Typography
+          variant="body1"
+          style={{ padding: 10, textAlign: "center" }}
+        >
+          Already have a username? <br />{" "}
+          <Link to="/" style={{ color: "white" }}>
+            Login Here.
+          </Link>
+        </Typography>
+      </form>
+    </Card>
+  );
+};
 
 const mapStateToProps = state => {
   return {
