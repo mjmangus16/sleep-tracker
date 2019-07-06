@@ -1,17 +1,29 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { getMonthlyData } from "../../store/actions/profileActions";
+import React, { useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
 
 import { sleepCalc } from "../../util/sleepCalc";
 
 import MonthlyChart from "./Charts/MonthlyChart";
 
-const Monthly = ({ isAuthenticated, id, monthlyData, getMonthlyData }) => {
+const Monthly = () => {
+  const {
+    0: {
+      isAuthenticated,
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const {
+    0: { monthlyData },
+    3: getMonthlyData
+  } = useContext(ProfileContext);
+
   useEffect(() => {
     if (isAuthenticated) {
       getMonthlyData(id);
     }
-  });
+  }, [isAuthenticated]);
 
   let days;
   let hours;
@@ -44,16 +56,4 @@ const Monthly = ({ isAuthenticated, id, monthlyData, getMonthlyData }) => {
   return <div style={{ width: "90%", margin: "auto" }}>{content}</div>;
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject,
-    monthlyData: state.profile.monthlyData
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { getMonthlyData }
-)(Monthly);
+export default Monthly;

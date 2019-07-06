@@ -54,7 +54,6 @@ export const AuthProvider = props => {
   }, []);
 
   const registerUser = (userData, redirect) => {
-    console.log(redirect);
     axios
       .post(`${link}/register`, userData)
       .then(res => redirect.push("/"))

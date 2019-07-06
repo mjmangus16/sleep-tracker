@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ProfileProvider } from "../../contextAPI/ProfileContext";
 import { withStyles } from "@material-ui/core/styles";
 import { Toolbar, Fab, Paper, Tabs, Tab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -65,46 +66,48 @@ const DashboardContainer = ({ classes }) => {
   }
 
   return (
-    <div>
-      <Paper className={classes.tabsRoot}>
-        <Tabs value={tabValue} onChange={changeTab} centered>
-          <Tab label="Daily" />
-          <Tab label="Weekly" />
-          <Tab label="Monthly" />
-          <Tab label="Yearly" />
-        </Tabs>
-      </Paper>
-      <Toolbar className={classes.root}>
-        <Fab
-          color="primary"
-          aria-label="Add"
-          size="small"
-          className={classes.fab}
-          onClick={sleepInputOpen}
-        >
-          <AddIcon />
-        </Fab>
-        <Fab
-          color="primary"
-          aria-label="Add"
-          size="small"
-          variant="extended"
-          style={{ paddingLeft: 15, paddingRight: 15 }}
-          onClick={toggleRecStatus}
-        >
-          Recommendations
-        </Fab>
-      </Toolbar>
-      <Paper style={{ width: "90%", margin: "auto", padding: 25 }}>
-        {content}
-      </Paper>
-      <SleepInputForm
-        status={sleepInputStatus}
-        close={sleepInputClose}
-        activeData={activeData}
-      />
-      <Recommendations status={recStatus} toggle={toggleRecStatus} />
-    </div>
+    <ProfileProvider>
+      <div>
+        <Paper className={classes.tabsRoot}>
+          <Tabs value={tabValue} onChange={changeTab} centered>
+            <Tab label="Daily" />
+            <Tab label="Weekly" />
+            <Tab label="Monthly" />
+            <Tab label="Yearly" />
+          </Tabs>
+        </Paper>
+        <Toolbar className={classes.root}>
+          <Fab
+            color="primary"
+            aria-label="Add"
+            size="small"
+            className={classes.fab}
+            onClick={sleepInputOpen}
+          >
+            <AddIcon />
+          </Fab>
+          <Fab
+            color="primary"
+            aria-label="Add"
+            size="small"
+            variant="extended"
+            style={{ paddingLeft: 15, paddingRight: 15 }}
+            onClick={toggleRecStatus}
+          >
+            Recommendations
+          </Fab>
+        </Toolbar>
+        <Paper style={{ width: "90%", margin: "auto", padding: 25 }}>
+          {content}
+        </Paper>
+        <SleepInputForm
+          status={sleepInputStatus}
+          close={sleepInputClose}
+          activeData={activeData}
+        />
+        <Recommendations status={recStatus} toggle={toggleRecStatus} />
+      </div>
+    </ProfileProvider>
   );
 };
 

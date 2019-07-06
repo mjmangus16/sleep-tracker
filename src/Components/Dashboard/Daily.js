@@ -1,17 +1,29 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { getDailyData } from "../../store/actions/profileActions";
+import React, { useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
 
 import { sleepCalc } from "../../util/sleepCalc";
 
 import DailyChart from "./Charts/DailyChart";
 
-const Daily = ({ isAuthenticated, id, getDailyData, dailyData }) => {
+const Daily = () => {
+  const {
+    0: {
+      isAuthenticated,
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const {
+    0: { dailyData },
+    2: getDailyData
+  } = useContext(ProfileContext);
+
   useEffect(() => {
     if (isAuthenticated) {
       getDailyData(id);
     }
-  });
+  }, [isAuthenticated]);
 
   let sum;
   let difference;
@@ -37,16 +49,4 @@ const Daily = ({ isAuthenticated, id, getDailyData, dailyData }) => {
   return <div>{content}</div>;
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject,
-    dailyData: state.profile.dailyData
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { getDailyData }
-)(Daily);
+export default Daily;

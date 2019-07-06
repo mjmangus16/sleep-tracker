@@ -38,9 +38,7 @@ const styles = theme => ({
 const LoginForm = ({ classes, login, history }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [state, dispatch, loginUser, setCurrentUser, registerUser] = useContext(
-    AuthContext
-  );
+  const { 2: loginUser } = useContext(AuthContext);
 
   const handleUsername = event => {
     setUsername(event.target.value);

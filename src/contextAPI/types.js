@@ -1,3 +1,19 @@
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
 export const GET_ERRORS = "GET_ERRORS";
+
+export const GET_DAILY_DATA = "GET_DAILY_DATA";
+
+export const GET_WEEKLY_DATA = "GET_WEEKLY_DATA";
+
+export const GET_MONTHLY_DATA = "GET_MONTHLY_DATA";
+
+export const GET_YEARLY_DATA = "GET_YEARLY_DATA";
+
+export const GET_YEARLY_ALL = "GET_YEARLY_ALL";
+
+export const UPDATE_SLEEP_OBJECT = "UPDATE_SLEEP_OBJECT";
+
+export const DELETE_SLEEP_OBJECT = "DELETE_SLEEP_OBJECT";
+
+export const POST_SLEEP_OBJECT = "POST_SLEEP_OBJECT";
