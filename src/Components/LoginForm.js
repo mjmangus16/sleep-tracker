@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+
+import { AuthContext } from "../contextAPI/AuthContext";
 
 import { Card, TextField, Button, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-
-import { login } from "../store/actions/authActions";
 
 const styles = theme => ({
   root: {
@@ -39,6 +38,7 @@ const styles = theme => ({
 const LoginForm = ({ classes, login, history }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [store, dispatch, loginUser, setCurrentUser] = useContext(AuthContext);
 
   const handleUsername = event => {
     setUsername(event.target.value);
@@ -54,7 +54,7 @@ const LoginForm = ({ classes, login, history }) => {
       username,
       password
     };
-    login(user, history);
+    loginUser(user, history);
   };
 
   return (
@@ -109,14 +109,4 @@ const LoginForm = ({ classes, login, history }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    logginIn: state.logginIn,
-    error: state.error
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { login }
-)(withStyles(styles)(LoginForm));
+export default withStyles(styles)(LoginForm);
