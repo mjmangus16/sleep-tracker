@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
 
 import { sleepCalc } from "../../util/sleepCalc";
 
 const RecommendationContent = () => {
+  const {
+    0: {
+      isAuthenticated,
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const {
+    0: { recommendationData },
+    6: getRecommendationData
+  } = useContext(ProfileContext);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getRecommendationData(id);
+    }
+  }, [isAuthenticated]);
+
   const maxMood = moodArray => Math.max(...moodArray);
 
   const calcMode = numArray => {
@@ -31,11 +51,11 @@ const RecommendationContent = () => {
     return modes;
   };
 
-  const moodArray = this.props.yearlyData.map(
+  const moodArray = recommendationData.map(
     day => day.day_emotion + day.sleep_emotion
   );
-  const maxMood_ = this.maxMood(moodArray);
-  const optimalSleep = this.props.yearlyData
+  const maxMood_ = maxMood(moodArray);
+  const optimalSleep = recommendationData
     .filter(day => day.day_emotion + day.sleep_emotion === maxMood_)
     .map(day =>
       parseInt(
@@ -45,13 +65,13 @@ const RecommendationContent = () => {
     );
   return (
     <div>
-      {this.calcMode(optimalSleep).length === 1
-        ? `Your mood score tends to be highest when you sleep ${this.calcMode(
+      {calcMode(optimalSleep).length === 1
+        ? `Your mood score tends to be highest when you sleep ${calcMode(
             optimalSleep
           )} hours.`
         : `Your mood score tends to be highest when you sleep either ${
-            this.calcMode(optimalSleep)[0]
-          } or ${this.calcMode(optimalSleep)[1]} hours.`}
+            calcMode(optimalSleep)[0]
+          } or ${calcMode(optimalSleep)[1]} hours.`}
     </div>
   );
 };
