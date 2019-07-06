@@ -123,6 +123,18 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
+  const getRecommendationData = id => {
+    axios
+      .get(`${link}/tracker/${id}/yearall/2019`)
+      .then(res => {
+        dispatch({
+          type: GET_RECOMMENDATION_DATA,
+          payload: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <ProfileContext.Provider
       value={[
@@ -131,7 +143,8 @@ export const ProfileProvider = props => {
         getDailyData,
         getWeeklyData,
         getMonthlyData,
-        getYearlyData
+        getYearlyData,
+        getRecommendationData
       ]}
     >
       {props.children}

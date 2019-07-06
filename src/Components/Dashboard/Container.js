@@ -4,7 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { Toolbar, Fab, Paper, Tabs, Tab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 
-import Recommendations from "./Recommendations";
+import Recommendations from "./RecommendationsModal";
 import SleepInputForm from "./SleepInputForm";
 import Daily from "./Daily";
 import Weekly from "./Weekly";
