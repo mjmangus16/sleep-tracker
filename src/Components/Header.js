@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../contextAPI/AuthContext";
 import { withStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
-import { connect } from "react-redux";
-import { logoutUser } from "../store/actions/authActions";
 
 const styles = theme => ({
   root: {
@@ -10,7 +9,11 @@ const styles = theme => ({
   }
 });
 
-const Header = ({ classes, isAuthenticated, logoutUser }) => {
+const Header = ({ classes, history }) => {
+  const {
+    0: { isAuthenticated },
+    4: logoutUser
+  } = useContext(AuthContext);
   return (
     <div className={classes.root}>
       <AppBar position="static" color="primary">
@@ -19,7 +22,7 @@ const Header = ({ classes, isAuthenticated, logoutUser }) => {
             Sleep Tracker
           </Typography>
           {isAuthenticated && (
-            <Button variant="outlined" onClick={logoutUser}>
+            <Button variant="outlined" onClick={() => logoutUser(history)}>
               LOGOUT
             </Button>
           )}
@@ -29,14 +32,4 @@ const Header = ({ classes, isAuthenticated, logoutUser }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { logoutUser }
-)(withStyles(styles)(Header));
+export default withStyles(styles)(Header);

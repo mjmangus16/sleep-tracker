@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+
+import { AuthContext } from "../contextAPI/AuthContext";
+
 import Loader from "react-loader-spinner";
 
 import { Card, TextField, Button, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-
-import { registerUser } from "../store/actions/authActions";
 
 const styles = theme => ({
   root: {
@@ -37,12 +37,13 @@ const styles = theme => ({
   }
 });
 
-const CreateUserForm = ({ classes, registerUser, history }) => {
+const CreateUserForm = ({ classes, history }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [first_name, setFirst_name] = useState("");
   const [last_name, setLast_name] = useState("");
+  const { 5: registerUser } = useContext(AuthContext);
 
   const handleUsername = e => {
     setUsername(e.target.value);
@@ -151,14 +152,4 @@ const CreateUserForm = ({ classes, registerUser, history }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    registering: state.registering,
-    error: state.error
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withStyles(styles)(CreateUserForm));
+export default withStyles(styles)(CreateUserForm);
