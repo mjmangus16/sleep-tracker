@@ -34,13 +34,7 @@ const styles = theme => ({
   }
 });
 
-const SleepInputForm = ({
-  classes,
-  activeData,
-  updateSleepObject,
-  close,
-  status
-}) => {
+const SleepInputForm = ({ classes, activeData, close, status }) => {
   const [date, setDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -51,7 +45,9 @@ const SleepInputForm = ({
       user: { subject: id }
     }
   } = useContext(AuthContext);
-  const { 7: postSleepObject } = useContext(ProfileContext);
+  const { 7: postSleepObject, 8: updateSleepObject } = useContext(
+    ProfileContext
+  );
 
   const resetState = () => {
     setDate("");

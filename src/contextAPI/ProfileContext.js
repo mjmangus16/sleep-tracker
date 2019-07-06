@@ -147,6 +147,18 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
+  const updateSleepObject = data => {
+    axios
+      .put(`${link}/tracker/`, data)
+      .then(res => {
+        dispatch({
+          type: UPDATE_SLEEP_OBJECT,
+          payload: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <ProfileContext.Provider
       value={[
@@ -157,7 +169,8 @@ export const ProfileProvider = props => {
         getMonthlyData,
         getYearlyData,
         getRecommendationData,
-        postSleepObject
+        postSleepObject,
+        updateSleepObject
       ]}
     >
       {props.children}
