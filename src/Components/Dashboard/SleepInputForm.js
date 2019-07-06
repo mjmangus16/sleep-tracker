@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import {
-  postSleepObject,
-  updateSleepObject
-} from "../../store/actions/profileActions";
+import React, { useState, useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
+
 import { withStyles } from "@material-ui/core/styles";
 import {
   TextField,
@@ -37,9 +36,7 @@ const styles = theme => ({
 
 const SleepInputForm = ({
   classes,
-  id,
   activeData,
-  postSleepObject,
   updateSleepObject,
   close,
   status
@@ -49,6 +46,12 @@ const SleepInputForm = ({
   const [endTime, setEndTime] = useState("");
   const [morning, setMorning] = useState(5);
   const [day, setDay] = useState(5);
+  const {
+    0: {
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const { 7: postSleepObject } = useContext(ProfileContext);
 
   const resetState = () => {
     setDate("");
@@ -321,15 +324,4 @@ const SleepInputForm = ({
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { postSleepObject, updateSleepObject }
-)(withStyles(styles)(SleepInputForm));
+export default withStyles(styles)(SleepInputForm);

@@ -135,6 +135,18 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
+  const postSleepObject = data => {
+    axios
+      .post(`${link}/tracker`, data)
+      .then(res =>
+        dispatch({
+          type: POST_SLEEP_OBJECT,
+          payload: res.data
+        })
+      )
+      .catch(err => console.log(err));
+  };
+
   return (
     <ProfileContext.Provider
       value={[
@@ -144,7 +156,8 @@ export const ProfileProvider = props => {
         getWeeklyData,
         getMonthlyData,
         getYearlyData,
-        getRecommendationData
+        getRecommendationData,
+        postSleepObject
       ]}
     >
       {props.children}
