@@ -1,17 +1,29 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
-import { getWeeklyData } from "../../store/actions/profileActions";
+import React, { useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
 
 import { sleepCalc } from "../../util/sleepCalc";
 
 import WeeklyChart from "./Charts/WeeklyChart";
 
-const Weekly = ({ isAuthenticated, id, weeklyData, getWeeklyData }) => {
+const Weekly = () => {
+  const {
+    0: {
+      isAuthenticated,
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const {
+    0: { weeklyData },
+    3: getWeeklyData
+  } = useContext(ProfileContext);
+
   useEffect(() => {
     if (isAuthenticated) {
       getWeeklyData(id);
     }
-  });
+  }, [isAuthenticated]);
 
   let days;
   let hours;
@@ -44,16 +56,4 @@ const Weekly = ({ isAuthenticated, id, weeklyData, getWeeklyData }) => {
   return <div style={{ width: "90%", margin: "auto" }}>{content}</div>;
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject,
-    weeklyData: state.profile.weeklyData
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { getWeeklyData }
-)(Weekly);
+export default Weekly;

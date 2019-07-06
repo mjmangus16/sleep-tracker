@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer } from "react";
 
 import axios from "axios";
 import {
@@ -6,7 +6,7 @@ import {
   GET_WEEKLY_DATA,
   GET_MONTHLY_DATA,
   GET_YEARLY_DATA,
-  GET_YEARLY_ALL,
+  GET_RECOMMENDATION_DATA,
   UPDATE_SLEEP_OBJECT,
   DELETE_SLEEP_OBJECT,
   POST_SLEEP_OBJECT,
@@ -35,12 +35,12 @@ const profileReducer = (state, action) => {
     case GET_YEARLY_DATA:
       return {
         ...state,
-        recommendationData: action.payload
+        yearlyData: action.payload
       };
-    case GET_YEARLY_ALL:
+    case GET_RECOMMENDATION_DATA:
       return {
         ...state,
-        yearlyData: action.payload
+        recommendationData: action.payload
       };
     case POST_SLEEP_OBJECT:
       return {
@@ -87,7 +87,7 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
-  const getWeeklyData = id => dispatch => {
+  const getWeeklyData = id => {
     axios
       .get(`${link}/tracker/${id}/limit/7/order/desc`)
       .then(res =>
@@ -96,12 +96,7 @@ export const ProfileProvider = props => {
           payload: res.data
         })
       )
-      .catch(err =>
-        dispatch({
-          type: GET_ERRORS,
-          payload: err.response.data
-        })
-      );
+      .catch(err => console.log(err));
   };
 
   const getMonthlyData = id => {
@@ -116,9 +111,28 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
+  const getYearlyData = id => {
+    axios
+      .get(`${link}/tracker/${id}/year/2019`)
+      .then(res => {
+        dispatch({
+          type: GET_YEARLY_DATA,
+          payload: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <ProfileContext.Provider
-      value={[state, dispatch, getDailyData, getMonthlyData]}
+      value={[
+        state,
+        dispatch,
+        getDailyData,
+        getWeeklyData,
+        getMonthlyData,
+        getYearlyData
+      ]}
     >
       {props.children}
     </ProfileContext.Provider>

@@ -16,7 +16,7 @@ const Monthly = () => {
   } = useContext(AuthContext);
   const {
     0: { monthlyData },
-    3: getMonthlyData
+    4: getMonthlyData
   } = useContext(ProfileContext);
 
   useEffect(() => {

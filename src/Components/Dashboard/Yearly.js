@@ -1,36 +1,29 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { getYearlyAll } from "../../store/actions/profileActions";
+import React, { useEffect, useContext } from "react";
+
+import { ProfileContext } from "../../contextAPI/ProfileContext";
+import { AuthContext } from "../../contextAPI/AuthContext";
 
 import YearlyTable from "./Charts/YearlyTable";
 
-class Yearly extends Component {
-  componentDidMount() {
-    if (this.props.isAuthenticated) {
-      this.props.getYearlyAll(this.props.id);
+const Yearly = ({ editSleep }) => {
+  const {
+    0: {
+      isAuthenticated,
+      user: { subject: id }
     }
-  }
+  } = useContext(AuthContext);
+  const {
+    0: { yearlyData },
+    5: getYearlyData
+  } = useContext(ProfileContext);
 
-  render() {
-    return (
-      <YearlyTable
-        data={this.props.yearlyData}
-        editSleep={this.props.editSleep}
-      />
-    );
-  }
-}
+  useEffect(() => {
+    if (isAuthenticated) {
+      getYearlyData(id);
+    }
+  }, [isAuthenticated]);
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject,
-    yearlyData: state.profile.yearlyData
-  };
+  return <YearlyTable data={yearlyData} editSleep={editSleep} />;
 };
 
-export default connect(
-  mapStateToProps,
-  { getYearlyAll }
-)(Yearly);
+export default Yearly;
