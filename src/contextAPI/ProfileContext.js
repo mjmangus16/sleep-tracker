@@ -84,6 +84,18 @@ export const ProfileProvider = props => {
           payload: res.data[0] || ""
         })
       )
+      .catch(err => console.log(err));
+  };
+
+  const getWeeklyData = id => dispatch => {
+    axios
+      .get(`${link}/tracker/${id}/limit/7/order/desc`)
+      .then(res =>
+        dispatch({
+          type: GET_WEEKLY_DATA,
+          payload: res.data
+        })
+      )
       .catch(err =>
         dispatch({
           type: GET_ERRORS,
@@ -92,8 +104,22 @@ export const ProfileProvider = props => {
       );
   };
 
+  const getMonthlyData = id => {
+    axios
+      .get(`${link}/tracker/${id}/month/6`)
+      .then(res =>
+        dispatch({
+          type: GET_MONTHLY_DATA,
+          payload: res.data
+        })
+      )
+      .catch(err => console.log(err));
+  };
+
   return (
-    <ProfileContext.Provider value={[state, dispatch, getDailyData]}>
+    <ProfileContext.Provider
+      value={[state, dispatch, getDailyData, getMonthlyData]}
+    >
       {props.children}
     </ProfileContext.Provider>
   );
