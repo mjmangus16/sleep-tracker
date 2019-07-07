@@ -1,6 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { deleteSleepObject } from "../../../store/actions/profileActions";
+import React, { useContext } from "react";
+
+import { ProfileContext } from "../../../contextAPI/ProfileContext";
+import { AuthContext } from "../../../contextAPI/AuthContext";
+
 import { withStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -24,8 +26,16 @@ const styles = theme => ({
   }
 });
 
-const YearlyTable = ({ classes, data, id, editSleep, deleteSleepObject }) => {
+const YearlyTable = ({ classes, data, editSleep }) => {
+  const {
+    0: {
+      user: { subject: id }
+    }
+  } = useContext(AuthContext);
+  const { 9: deleteSleepObject } = useContext(ProfileContext);
+
   const deleteItem = item => {
+    console.log("yes");
     const dateArray = item.date.split("/");
     const month = dateArray[0];
     const day = dateArray[1];
@@ -106,15 +116,4 @@ const YearlyTable = ({ classes, data, id, editSleep, deleteSleepObject }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    error: state.error,
-    id: state.auth.user.subject
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { deleteSleepObject }
-)(withStyles(styles)(YearlyTable));
+export default withStyles(styles)(YearlyTable);

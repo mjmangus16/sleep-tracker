@@ -51,7 +51,7 @@ export const AuthProvider = props => {
         window.location.href = "/";
       }
     }
-  }, []);
+  }, [state.isAuthenticated]);
 
   const registerUser = (userData, redirect) => {
     axios

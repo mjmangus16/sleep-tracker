@@ -159,6 +159,21 @@ export const ProfileProvider = props => {
       .catch(err => console.log(err));
   };
 
+  const deleteSleepObject = (id, month, day, year) => {
+    axios
+      .delete(
+        `${link}/tracker/${id}/date/${month}%2F${day}%2F${year}/year/${year}`
+      )
+      .then(res => {
+        console.log(res);
+        dispatch({
+          type: DELETE_SLEEP_OBJECT,
+          payload: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <ProfileContext.Provider
       value={[
@@ -170,7 +185,8 @@ export const ProfileProvider = props => {
         getYearlyData,
         getRecommendationData,
         postSleepObject,
-        updateSleepObject
+        updateSleepObject,
+        deleteSleepObject
       ]}
     >
       {props.children}
